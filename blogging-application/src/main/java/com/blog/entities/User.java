@@ -3,16 +3,14 @@
  */
 package com.blog.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author ABHISHEK
@@ -34,4 +32,8 @@ public class User {
 	private String email;
 	private String password;
 	private String about;
+
+	// one to many relationship
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Post> posts = new ArrayList<>();
 }
