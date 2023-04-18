@@ -2,6 +2,7 @@ package com.blog.services.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +93,12 @@ public class PostServiceImpl implements PostService {
 	 */
 	@Override
 	public List<PostDTO> getPostsByCategory(Integer categoryId) {
-		return null;
+		Category category = this.categoryRepository.findById(categoryId)
+				.orElseThrow(() -> new ResourceNotFoundException("Category", "category Id", categoryId));
+		List<Post> posts = this.postRepository.findByCategory(category);
+		List<PostDTO> postDTOS = posts.stream().map((post) -> this.modelMapper.map(post, PostDTO.class))
+				.collect(Collectors.toList());
+		return postDTOS;
 	}
 
 	/**
@@ -101,7 +107,12 @@ public class PostServiceImpl implements PostService {
 	 */
 	@Override
 	public List<PostDTO> getPostsByUser(Integer userId) {
-		return null;
+		User user = this.userRepository.findById(userId)
+				.orElseThrow(() -> new ResourceNotFoundException("User", "user id", userId));
+		List<Post> posts = this.postRepository.findByUser(user);
+		List<PostDTO> postDTOS = posts.stream().map((post) -> this.modelMapper.map(post, PostDTO.class))
+				.collect(Collectors.toList());
+		return postDTOS;
 	}
 
 	/**
