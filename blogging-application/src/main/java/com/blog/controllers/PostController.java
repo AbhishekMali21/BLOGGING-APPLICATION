@@ -2,6 +2,7 @@ package com.blog.controllers;
 
 import java.util.List;
 
+import com.blog.payloads.PostResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +52,7 @@ public class PostController {
 	}
 
 	@GetMapping("/posts")
-	public ResponseEntity<List<PostDTO>> getAllPosts(
+	public ResponseEntity<PostResponse> getAllPosts(
 			@RequestParam(value = "pageNumber", defaultValue = "1", required = false) Integer pageNumber,
 			@RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize) {
 		return ResponseEntity.ok(this.postService.getAllPosts(pageNumber, pageSize));
