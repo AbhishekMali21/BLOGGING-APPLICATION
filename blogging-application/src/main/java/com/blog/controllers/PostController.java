@@ -1,8 +1,5 @@
 package com.blog.controllers;
 
-import java.util.List;
-
-import com.blog.payloads.PostResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blog.payloads.PostDTO;
+import com.blog.payloads.PostResponse;
 import com.blog.payloads.StatusResponse;
 import com.blog.services.PostService;
 
@@ -35,15 +33,19 @@ public class PostController {
 	}
 
 	@GetMapping("/category/{categoryId}/posts")
-	public ResponseEntity<List<PostDTO>> getPostsByCategory(@PathVariable Integer categoryId) {
-		List<PostDTO> posts = this.postService.getPostsByCategory(categoryId);
-		return new ResponseEntity<List<PostDTO>>(posts, HttpStatus.OK);
+	public ResponseEntity<PostResponse> getPostsByCategory(@PathVariable Integer categoryId,
+			@RequestParam(value = "pageNumber", defaultValue = "1", required = false) Integer pageNumber,
+			@RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize) {
+		PostResponse postsByCategory = this.postService.getPostsByCategory(categoryId, pageNumber, pageSize);
+		return new ResponseEntity<PostResponse>(postsByCategory, HttpStatus.OK);
 	}
 
 	@GetMapping("/user/{userId}/posts")
-	public ResponseEntity<List<PostDTO>> getPostsByUser(@PathVariable Integer userId) {
-		List<PostDTO> posts = this.postService.getPostsByUser(userId);
-		return new ResponseEntity<List<PostDTO>>(posts, HttpStatus.OK);
+	public ResponseEntity<PostResponse> getPostsByUser(@PathVariable Integer userId,
+			@RequestParam(value = "pageNumber", defaultValue = "1", required = false) Integer pageNumber,
+			@RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize) {
+		PostResponse postsByUser = this.postService.getPostsByUser(userId, pageNumber, pageSize);
+		return new ResponseEntity<PostResponse>(postsByUser, HttpStatus.OK);
 	}
 
 	@GetMapping("/posts/{postId}")

@@ -128,13 +128,16 @@ public class PostServiceImpl implements PostService {
 	 * @return
 	 */
 	@Override
-	public List<PostDTO> getPostsByCategory(Integer categoryId) {
+	public PostResponse getPostsByCategory(Integer categoryId, Integer pageNumber, Integer pageSize) {
 		Category category = this.categoryRepository.findById(categoryId)
 				.orElseThrow(() -> new ResourceNotFoundException("Category", "category Id", categoryId));
-		List<Post> posts = this.postRepository.findByCategory(category);
-		List<PostDTO> postDTOS = posts.stream().map((post) -> this.modelMapper.map(post, PostDTO.class))
+		Pageable pageable = PageRequest.of(pageNumber, pageSize);
+		Page<Post> posts = this.postRepository.findByCategory(category, pageable);
+		List<Post> allPosts = posts.getContent();
+		List<PostDTO> postDTOS = allPosts.stream().map((post) -> this.modelMapper.map(post, PostDTO.class))
 				.collect(Collectors.toList());
-		return postDTOS;
+		PostResponse postResponse = paginationInfo(posts, postDTOS);
+		return postResponse;
 	}
 
 	/**
@@ -142,13 +145,16 @@ public class PostServiceImpl implements PostService {
 	 * @return
 	 */
 	@Override
-	public List<PostDTO> getPostsByUser(Integer userId) {
+	public PostResponse getPostsByUser(Integer userId, Integer pageNumber, Integer pageSize) {
 		User user = this.userRepository.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "user id", userId));
-		List<Post> posts = this.postRepository.findByUser(user);
-		List<PostDTO> postDTOS = posts.stream().map((post) -> this.modelMapper.map(post, PostDTO.class))
+		Pageable pageable = PageRequest.of(pageNumber, pageSize);
+		Page<Post> posts = this.postRepository.findByUser(user, pageable);
+		List<Post> allPosts = posts.getContent();
+		List<PostDTO> postDTOS = allPosts.stream().map((post) -> this.modelMapper.map(post, PostDTO.class))
 				.collect(Collectors.toList());
-		return postDTOS;
+		PostResponse postResponse = paginationInfo(posts, postDTOS);
+		return postResponse;
 	}
 
 	/**
