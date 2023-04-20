@@ -56,8 +56,10 @@ public class PostController {
 	@GetMapping("/posts")
 	public ResponseEntity<PostResponse> getAllPosts(
 			@RequestParam(value = "pageNumber", defaultValue = "1", required = false) Integer pageNumber,
-			@RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize) {
-		return ResponseEntity.ok(this.postService.getAllPosts(pageNumber, pageSize));
+			@RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
+			@RequestParam(value = "sortBy", defaultValue = "postId", required = false) String sortBy,
+			@RequestParam(value = "sortOrder", defaultValue = "asc", required = false) String sortOrder) {
+		return ResponseEntity.ok(this.postService.getAllPosts(pageNumber, pageSize, sortBy, sortOrder));
 	}
 
 	@DeleteMapping("/posts/{postId}")
