@@ -30,4 +30,7 @@ public interface PostService {
 
 	// search posts
 	List<PostDTO> searchPosts(String keyword);
+
+	// search posts with content text
+	List<PostDTO> searchPostsContentText(String contentText);
 }

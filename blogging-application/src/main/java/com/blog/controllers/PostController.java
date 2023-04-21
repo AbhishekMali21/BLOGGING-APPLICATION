@@ -18,6 +18,8 @@ import com.blog.payloads.PostResponse;
 import com.blog.payloads.StatusResponse;
 import com.blog.services.PostService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 public class PostController {
@@ -72,5 +74,17 @@ public class PostController {
 	public ResponseEntity<PostDTO> updatePost(@RequestBody PostDTO postDTO, @PathVariable Integer postId) {
 		PostDTO updatePost = this.postService.updatePost(postDTO, postId);
 		return new ResponseEntity<PostDTO>(updatePost, HttpStatus.OK);
+	}
+
+	@GetMapping("/posts/search")
+	public ResponseEntity<List<PostDTO>> searchPostByTitle(@RequestParam(value = "titleQ", required = true) String titleQ){
+		List<PostDTO> postDTOs = this.postService.searchPosts(titleQ);
+		return new ResponseEntity<List<PostDTO>>(postDTOs, HttpStatus.OK);
+	}
+
+	@GetMapping("/posts/searchContent/{contentText}")
+	public ResponseEntity<List<PostDTO>> searchPostByContent(@PathVariable String contentText){
+		List<PostDTO> postDTOs = this.postService.searchPostsContentText(contentText);
+		return new ResponseEntity<List<PostDTO>>(postDTOs, HttpStatus.OK);
 	}
 }
