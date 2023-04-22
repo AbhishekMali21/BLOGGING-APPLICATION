@@ -1,5 +1,6 @@
 package com.blog.controllers;
 
+import com.blog.config.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,16 +37,16 @@ public class PostController {
 
 	@GetMapping("/category/{categoryId}/posts")
 	public ResponseEntity<PostResponse> getPostsByCategory(@PathVariable Integer categoryId,
-			@RequestParam(value = "pageNumber", defaultValue = "1", required = false) Integer pageNumber,
-			@RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize) {
+			@RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+			@RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize) {
 		PostResponse postsByCategory = this.postService.getPostsByCategory(categoryId, pageNumber, pageSize);
 		return new ResponseEntity<PostResponse>(postsByCategory, HttpStatus.OK);
 	}
 
 	@GetMapping("/user/{userId}/posts")
 	public ResponseEntity<PostResponse> getPostsByUser(@PathVariable Integer userId,
-			@RequestParam(value = "pageNumber", defaultValue = "1", required = false) Integer pageNumber,
-			@RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize) {
+			@RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+			@RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize) {
 		PostResponse postsByUser = this.postService.getPostsByUser(userId, pageNumber, pageSize);
 		return new ResponseEntity<PostResponse>(postsByUser, HttpStatus.OK);
 	}
@@ -57,10 +58,10 @@ public class PostController {
 
 	@GetMapping("/posts")
 	public ResponseEntity<PostResponse> getAllPosts(
-			@RequestParam(value = "pageNumber", defaultValue = "1", required = false) Integer pageNumber,
-			@RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
-			@RequestParam(value = "sortBy", defaultValue = "postId", required = false) String sortBy,
-			@RequestParam(value = "sortOrder", defaultValue = "asc", required = false) String sortOrder) {
+			@RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+			@RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+			@RequestParam(value = "sortBy", defaultValue = AppConstants.POST_ID, required = false) String sortBy,
+			@RequestParam(value = "sortOrder", defaultValue = AppConstants.SORT_ASC, required = false) String sortOrder) {
 		return ResponseEntity.ok(this.postService.getAllPosts(pageNumber, pageSize, sortBy, sortOrder));
 	}
 

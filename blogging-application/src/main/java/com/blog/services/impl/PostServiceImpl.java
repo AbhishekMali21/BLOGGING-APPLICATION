@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.blog.config.AppConstants;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -49,7 +50,7 @@ public class PostServiceImpl implements PostService {
 		Category category = this.categoryRepository.findById(categoryId)
 				.orElseThrow(() -> new ResourceNotFoundException("Category", "category id", categoryId));
 		Post post = this.modelMapper.map(postDTO, Post.class);
-		post.setImageName("default.png");
+		post.setImageName(AppConstants.DEFAULT_PNG);
 		post.setAddedDate(new Date());
 		post.setUser(user);
 		post.setCategory(category);
@@ -100,9 +101,9 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public PostResponse getAllPosts(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
 		Sort sort = null;
-		if(sortOrder.equalsIgnoreCase("asc")){
+		if(sortOrder.equalsIgnoreCase(AppConstants.SORT_ASC)){
 			sort = Sort.by(sortBy).ascending();
-		} else if(sortOrder.equalsIgnoreCase("desc")){
+		} else if(sortOrder.equalsIgnoreCase(AppConstants.SORT_DESC)){
 			sort = Sort.by(sortBy).descending();
 		}
 		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
@@ -181,7 +182,7 @@ public class PostServiceImpl implements PostService {
 	 */
 	@Override
 	public List<PostDTO> searchPostsContentText(String contentText) {
-		List<Post> posts = this.postRepository.searchByContentText("%" + contentText + "%");
+		List<Post> posts = this.postRepository.searchByContentText(AppConstants.PERCENT_SIGN + contentText + AppConstants.PERCENT_SIGN);
 		List<PostDTO> postDTOs = posts.stream().map((post) -> this.modelMapper.map(post, PostDTO.class)).collect(Collectors.toList());
 		return postDTOs;
 	}
