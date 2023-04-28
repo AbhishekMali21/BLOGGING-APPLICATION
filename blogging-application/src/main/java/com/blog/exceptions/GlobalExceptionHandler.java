@@ -33,4 +33,11 @@ public class GlobalExceptionHandler {
 		});
 		return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST);
 	}
+
+	@ExceptionHandler(AuthorizationException.class)
+	public ResponseEntity<StatusResponse> authorizationException(AuthorizationException ex) {
+		String message = ex.getMessage();
+		StatusResponse status = new StatusResponse(message, false);
+		return new ResponseEntity<>(status, HttpStatus.BAD_REQUEST);
+	}
 }

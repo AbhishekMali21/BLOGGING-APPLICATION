@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.blog.exceptions.AuthorizationException;
 import com.blog.payloads.JwtAuthRequest;
 import com.blog.payloads.JwtAuthResponse;
 import com.blog.security.JwtTokenHelper;
@@ -31,7 +32,8 @@ public class AuthController {
 	private AuthenticationManager authenticationManager;
 
 	@PostMapping("/login")
-	public ResponseEntity<JwtAuthResponse> createToken(@RequestBody JwtAuthRequest jwtAuthRequest) throws Exception {
+	public ResponseEntity<JwtAuthResponse> createToken(@RequestBody JwtAuthRequest jwtAuthRequest)
+			throws AuthorizationException {
 		this.authenticate(jwtAuthRequest.getUserName(), jwtAuthRequest.getPassword());
 		UserDetails userDetails = this.userDetailsService.loadUserByUsername(jwtAuthRequest.getUserName());
 		String generateToken = this.jwtTokenHelper.generateToken(userDetails);
@@ -40,14 +42,14 @@ public class AuthController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	private void authenticate(String userName, String password) throws Exception {
+	private void authenticate(String userName, String password) throws AuthorizationException {
 		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
 				userName, password);
 		try {
 			this.authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 		} catch (BadCredentialsException e) {
 			System.out.println("Invalid Details");
-			throw new Exception("Invalid User Name or Details");
+			throw new AuthorizationException("Invalid username or password !!");
 		}
 	}
 }
