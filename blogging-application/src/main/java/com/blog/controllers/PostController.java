@@ -32,7 +32,7 @@ import com.blog.services.PostService;
 import com.blog.utils.LoggingUtils;
 
 @RestController
-@RequestMapping("/api/blog")
+@RequestMapping("/api/blog/posts")
 public class PostController {
 
 	@Autowired
@@ -44,7 +44,7 @@ public class PostController {
 	@Value("${project.image}")
 	private String path;
 
-	@PostMapping("/posts/user/{userId}/category/{categoryId}")
+	@PostMapping("/user/{userId}/category/{categoryId}")
 	public ResponseEntity<PostDTO> createPost(@RequestBody PostDTO postDTO, @PathVariable Integer userId,
 			@PathVariable Integer categoryId) {
 		LoggingUtils.logMethodStart();
@@ -53,7 +53,7 @@ public class PostController {
 		return new ResponseEntity<>(post, HttpStatus.CREATED);
 	}
 
-	@GetMapping("/posts/category/{categoryId}")
+	@GetMapping("/category/{categoryId}")
 	public ResponseEntity<PostResponse> getPostsByCategory(@PathVariable Integer categoryId,
 			@RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
 			@RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize) {
@@ -63,7 +63,7 @@ public class PostController {
 		return ResponseEntity.ok(postsByCategory);
 	}
 
-	@GetMapping("/posts/user/{userId}")
+	@GetMapping("/user/{userId}")
 	public ResponseEntity<PostResponse> getPostsByUser(@PathVariable Integer userId,
 			@RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
 			@RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize) {
@@ -73,7 +73,7 @@ public class PostController {
 		return ResponseEntity.ok(postsByUser);
 	}
 
-	@GetMapping("/posts/{postId}")
+	@GetMapping("/{postId}")
 	public ResponseEntity<PostDTO> getPostById(@PathVariable Integer postId) {
 		LoggingUtils.logMethodStart();
 		PostDTO post = this.postService.getPostById(postId);
@@ -81,7 +81,7 @@ public class PostController {
 		return ResponseEntity.ok(post);
 	}
 
-	@GetMapping("/posts")
+	@GetMapping("/")
 	public ResponseEntity<PostResponse> getAllPosts(
 			@RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
 			@RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
@@ -93,7 +93,7 @@ public class PostController {
 		return ResponseEntity.ok(allPosts);
 	}
 
-	@DeleteMapping("/posts/{postId}")
+	@DeleteMapping("/{postId}")
 	public StatusResponse deletePost(@PathVariable Integer postId) {
 		LoggingUtils.logMethodStart();
 		this.postService.deletePost(postId);
@@ -101,7 +101,7 @@ public class PostController {
 		return new StatusResponse("Post is successfully Deleted", true);
 	}
 
-	@PutMapping("/posts/{postId}")
+	@PutMapping("/{postId}")
 	public ResponseEntity<PostDTO> updatePost(@RequestBody PostDTO postDTO, @PathVariable Integer postId) {
 		LoggingUtils.logMethodStart();
 		PostDTO updatePost = this.postService.updatePost(postDTO, postId);
@@ -109,7 +109,7 @@ public class PostController {
 		return ResponseEntity.ok(updatePost);
 	}
 
-	@GetMapping("/posts/search")
+	@GetMapping("/search")
 	public ResponseEntity<List<PostDTO>> searchPostByTitle(
 			@RequestParam(value = "titleQ", required = true) String titleQ) {
 		LoggingUtils.logMethodStart();
@@ -118,7 +118,7 @@ public class PostController {
 		return ResponseEntity.ok(postDTOs);
 	}
 
-	@GetMapping("/posts/searchContent/{contentText}")
+	@GetMapping("/searchContent/{contentText}")
 	public ResponseEntity<List<PostDTO>> searchPostByContent(@PathVariable String contentText) {
 		LoggingUtils.logMethodStart();
 		List<PostDTO> postDTOs = this.postService.searchPostsContentText(contentText);
@@ -127,7 +127,7 @@ public class PostController {
 	}
 
 	// post image upload api
-	@PostMapping("/posts/image/upload/{postId}")
+	@PostMapping("/image/upload/{postId}")
 	public ResponseEntity<PostDTO> uploadPostImage(@RequestParam("image") MultipartFile image,
 			@PathVariable Integer postId) throws IOException {
 		LoggingUtils.logMethodStart();
@@ -140,7 +140,7 @@ public class PostController {
 	}
 
 	// method to serve image files
-	@GetMapping(value = "/posts/image/{imageName}", produces = MediaType.IMAGE_JPEG_VALUE)
+	@GetMapping(value = "/image/{imageName}", produces = MediaType.IMAGE_JPEG_VALUE)
 	public void downloadImage(@PathVariable("imageName") String imageName, HttpServletResponse response)
 			throws IOException {
 		LoggingUtils.logMethodStart();

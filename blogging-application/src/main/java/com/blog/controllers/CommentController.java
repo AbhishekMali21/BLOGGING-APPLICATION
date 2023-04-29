@@ -16,13 +16,13 @@ import com.blog.services.CommentService;
 import com.blog.utils.LoggingUtils;
 
 @RestController
-@RequestMapping("/api/blog")
+@RequestMapping("/api/blog/comments")
 public class CommentController {
 
 	@Autowired
 	private CommentService commentService;
 
-	@PostMapping("/comments/post/{postId}")
+	@PostMapping("/post/{postId}")
 	public ResponseEntity<CommentDTO> createComment(@RequestBody CommentDTO commentDTO, @PathVariable Integer postId) {
 		LoggingUtils.logMethodStart();
 		CommentDTO newCommentDTO = this.commentService.createComment(commentDTO, postId);
@@ -30,7 +30,7 @@ public class CommentController {
 		return new ResponseEntity<>(newCommentDTO, HttpStatus.CREATED);
 	}
 
-	@DeleteMapping("/comments/{commentId}")
+	@DeleteMapping("/{commentId}")
 	public ResponseEntity<StatusResponse> deleteComment(@PathVariable Integer commentId) {
 		LoggingUtils.logMethodStart();
 		this.commentService.deleteComment(commentId);

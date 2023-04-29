@@ -19,6 +19,7 @@ import com.blog.payloads.JwtAuthResponse;
 import com.blog.payloads.UserDTO;
 import com.blog.security.JwtTokenHelper;
 import com.blog.services.UserService;
+import com.blog.utils.ApiPerformanceUtil;
 import com.blog.utils.LoggingUtils;
 
 import lombok.extern.log4j.Log4j2;
@@ -44,11 +45,13 @@ public class AuthController {
 	public ResponseEntity<JwtAuthResponse> createToken(@RequestBody JwtAuthRequest jwtAuthRequest)
 			throws AuthorizationException {
 		LoggingUtils.logMethodStart();
-		this.authenticate(jwtAuthRequest.getUserName(), jwtAuthRequest.getPassword());
-		UserDetails userDetails = this.userDetailsService.loadUserByUsername(jwtAuthRequest.getUserName());
-		String generateToken = this.jwtTokenHelper.generateToken(userDetails);
 		JwtAuthResponse response = new JwtAuthResponse();
-		response.setToken(generateToken);
+		ApiPerformanceUtil.measure(() -> {
+			this.authenticate(jwtAuthRequest.getUserName(), jwtAuthRequest.getPassword());
+			UserDetails userDetails = this.userDetailsService.loadUserByUsername(jwtAuthRequest.getUserName());
+			String generateToken = this.jwtTokenHelper.generateToken(userDetails);
+			response.setToken(generateToken);
+		}, "createToken API");
 		LoggingUtils.logMethodEnd();
 		return ResponseEntity.ok(response);
 	}
