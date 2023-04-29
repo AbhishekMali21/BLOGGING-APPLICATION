@@ -44,7 +44,7 @@ public class PostController {
 	@Value("${project.image}")
 	private String path;
 
-	@PostMapping("/user/{userId}/category/{categoryId}/posts")
+	@PostMapping("/posts/user/{userId}/category/{categoryId}")
 	public ResponseEntity<PostDTO> createPost(@RequestBody PostDTO postDTO, @PathVariable Integer userId,
 			@PathVariable Integer categoryId) {
 		LoggingUtils.logMethodStart();
@@ -53,7 +53,7 @@ public class PostController {
 		return new ResponseEntity<>(post, HttpStatus.CREATED);
 	}
 
-	@GetMapping("/category/{categoryId}/posts")
+	@GetMapping("/posts/category/{categoryId}")
 	public ResponseEntity<PostResponse> getPostsByCategory(@PathVariable Integer categoryId,
 			@RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
 			@RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize) {
@@ -63,7 +63,7 @@ public class PostController {
 		return ResponseEntity.ok(postsByCategory);
 	}
 
-	@GetMapping("/user/{userId}/posts")
+	@GetMapping("/posts/user/{userId}")
 	public ResponseEntity<PostResponse> getPostsByUser(@PathVariable Integer userId,
 			@RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
 			@RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize) {
