@@ -32,7 +32,7 @@ import com.blog.services.PostService;
 import com.blog.utils.LoggingUtils;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/blog")
 public class PostController {
 
 	@Autowired
