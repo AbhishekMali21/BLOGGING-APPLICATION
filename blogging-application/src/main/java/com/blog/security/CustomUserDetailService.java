@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.blog.entities.User;
-import com.blog.exceptions.ResourceNotFoundException;
+import com.blog.exceptions.UserNotFoundException;
 import com.blog.repositories.UserRepository;
 
 @Service
@@ -32,7 +32,7 @@ public class CustomUserDetailService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// loading user from database by username
 		User user = this.userRepository.findByEmail(username)
-				.orElseThrow(() -> new ResourceNotFoundException("User", "email :" + username, 0));
+				.orElseThrow(() -> new UserNotFoundException("User", "email", username));
 		return user;
 	}
 }
