@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.blog.payloads.CategoryDTO;
 import com.blog.payloads.StatusResponse;
 import com.blog.services.CategoryService;
+import com.blog.utils.LoggingUtils;
 
 @RestController
 @RequestMapping("/api/blog/category")
@@ -30,7 +31,9 @@ public class CategoryController {
 	// create
 	@PostMapping("/")
 	public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO) {
+		LoggingUtils.logMethodStart();
 		CategoryDTO createCategoryDTO = this.categoryService.createCategory(categoryDTO);
+		LoggingUtils.logMethodEnd();
 		return new ResponseEntity<>(createCategoryDTO, HttpStatus.CREATED);
 	}
 
@@ -38,27 +41,37 @@ public class CategoryController {
 	@PutMapping("/{categoryId}")
 	public ResponseEntity<CategoryDTO> updateCategory(@Valid @RequestBody CategoryDTO categoryDTO,
 			@PathVariable Integer categoryId) {
+		LoggingUtils.logMethodStart();
 		CategoryDTO updateCategoryDTO = this.categoryService.updateCategory(categoryDTO, categoryId);
+		LoggingUtils.logMethodEnd();
 		return ResponseEntity.ok(updateCategoryDTO);
 	}
 
 	// delete
 	@DeleteMapping("/{categoryId}")
 	public ResponseEntity<StatusResponse> deleteCategory(@PathVariable Integer categoryId) {
+		LoggingUtils.logMethodStart();
 		this.categoryService.deleteCategory(categoryId);
+		LoggingUtils.logMethodEnd();
 		return new ResponseEntity<>(new StatusResponse("Category is deleted successfully !!", true), HttpStatus.OK);
 	}
 
 	// get
 	@GetMapping("/")
 	public ResponseEntity<List<CategoryDTO>> getAllCategories() {
-		return ResponseEntity.ok(this.categoryService.getCategories());
+		LoggingUtils.logMethodStart();
+		List<CategoryDTO> categories = this.categoryService.getCategories();
+		LoggingUtils.logMethodEnd();
+		return ResponseEntity.ok(categories);
 	}
 
 	// get all
 	@GetMapping("/{categoryId}")
 	public ResponseEntity<CategoryDTO> getCategory(@PathVariable Integer categoryId) {
-		return ResponseEntity.ok(this.categoryService.getCategory(categoryId));
+		LoggingUtils.logMethodStart();
+		CategoryDTO category = this.categoryService.getCategory(categoryId);
+		LoggingUtils.logMethodEnd();
+		return ResponseEntity.ok(category);
 	}
 
 }

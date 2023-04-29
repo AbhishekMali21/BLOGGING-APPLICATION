@@ -4,7 +4,7 @@ package com.blog.config;
 * this file is meant to keep the constants in
 * a single file to reduce the redundancy,
 * to reduce hard coding values,
-* good practise to keep the constants in a single file
+* good practice to keep the constants in a single file
 */
 public class AppConstants {
 	public static final String DEFAULT_PNG = "default.png";

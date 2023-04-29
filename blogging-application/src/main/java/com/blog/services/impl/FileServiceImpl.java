@@ -13,12 +13,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.blog.services.FileService;
+import com.blog.utils.LoggingUtils;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 @Service
 public class FileServiceImpl implements FileService {
 
 	@Override
 	public String uploadImage(String path, MultipartFile file) throws IOException {
+		LoggingUtils.logMethodStart();
 		// File name
 		String name = file.getOriginalFilename();
 		// random name generate file
@@ -33,13 +38,18 @@ public class FileServiceImpl implements FileService {
 		}
 		// file copy
 		Files.copy(file.getInputStream(), Paths.get(filePath));
+		log.info(fileName);
+		LoggingUtils.logMethodEnd();
 		return fileName;
 	}
 
 	@Override
 	public InputStream getResource(String path, String fileName) throws FileNotFoundException {
+		LoggingUtils.logMethodStart();
 		String fullPath = path + File.separator + fileName;
 		InputStream is = new FileInputStream(fullPath);
+		log.info(is);
+		LoggingUtils.logMethodEnd();
 		return is;
 	}
 

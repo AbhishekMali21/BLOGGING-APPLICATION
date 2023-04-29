@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.blog.entities.User;
 import com.blog.exceptions.UserNotFoundException;
 import com.blog.repositories.UserRepository;
+import com.blog.utils.LoggingUtils;
 
 @Service
 public class CustomUserDetailService implements UserDetailsService {
@@ -31,8 +32,10 @@ public class CustomUserDetailService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// loading user from database by username
+		LoggingUtils.logMethodStart();
 		User user = this.userRepository.findByEmail(username)
 				.orElseThrow(() -> new UserNotFoundException("User", "email", username));
+		LoggingUtils.logMethodEnd();
 		return user;
 	}
 }

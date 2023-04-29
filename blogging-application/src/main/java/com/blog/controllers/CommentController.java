@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.blog.payloads.CommentDTO;
 import com.blog.payloads.StatusResponse;
 import com.blog.services.CommentService;
+import com.blog.utils.LoggingUtils;
 
 @RestController
 @RequestMapping("/api/blog")
@@ -21,15 +22,19 @@ public class CommentController {
 	@Autowired
 	private CommentService commentService;
 
-	@PostMapping("/post/{postId}/comments")
+	@PostMapping("/comments/post/{postId}")
 	public ResponseEntity<CommentDTO> createComment(@RequestBody CommentDTO commentDTO, @PathVariable Integer postId) {
+		LoggingUtils.logMethodStart();
 		CommentDTO newCommentDTO = this.commentService.createComment(commentDTO, postId);
+		LoggingUtils.logMethodEnd();
 		return new ResponseEntity<>(newCommentDTO, HttpStatus.CREATED);
 	}
 
 	@DeleteMapping("/comments/{commentId}")
 	public ResponseEntity<StatusResponse> deleteComment(@PathVariable Integer commentId) {
+		LoggingUtils.logMethodStart();
 		this.commentService.deleteComment(commentId);
+		LoggingUtils.logMethodEnd();
 		return new ResponseEntity<>(new StatusResponse("Comment Deleted Successfully !!", true), HttpStatus.OK);
 	}
 }

@@ -7,6 +7,8 @@ import lombok.Setter;
 @Setter
 public class UserNotFoundException extends RuntimeException {
 
+	private static final long serialVersionUID = 1L;
+
 	String resourceName;
 	String fieldName;
 	String fieldValue;

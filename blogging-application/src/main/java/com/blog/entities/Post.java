@@ -45,4 +45,12 @@ public class Post {
 
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
 	private Set<Comment> comments = new HashSet<>();
+
+	@Override
+	public String toString() {
+		return "Post [postId=" + postId + ", title=" + title + ", content=" + content + ", imageName=" + imageName
+				+ ", addedDate=" + addedDate + ", category=" + category + ", user=" + user + ", comments=" + comments
+				+ "]";
+	}
+
 }

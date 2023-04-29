@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.blog.payloads.StatusResponse;
 import com.blog.payloads.UserDTO;
 import com.blog.services.UserService;
+import com.blog.utils.LoggingUtils;
 
 @RestController
 @RequestMapping("/api/blog/users")
@@ -30,25 +31,35 @@ public class UserController {
 	// GET
 	@GetMapping("/")
 	public ResponseEntity<List<UserDTO>> getAllUser() {
-		return ResponseEntity.ok(this.userService.getAllUsers());
+		LoggingUtils.logMethodStart();
+		List<UserDTO> allUsers = this.userService.getAllUsers();
+		LoggingUtils.logMethodEnd();
+		return ResponseEntity.ok(allUsers);
 	}
 
 	@GetMapping("/{userId}")
 	public ResponseEntity<UserDTO> getSingleUser(@PathVariable Integer userId) {
-		return ResponseEntity.ok(this.userService.getUserById(userId));
+		LoggingUtils.logMethodStart();
+		UserDTO user = this.userService.getUserById(userId);
+		LoggingUtils.logMethodEnd();
+		return ResponseEntity.ok(user);
 	}
 
 	// POST
 	@PostMapping("/")
 	public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
+		LoggingUtils.logMethodStart();
 		UserDTO createUserDTO = this.userService.createUser(userDTO);
+		LoggingUtils.logMethodEnd();
 		return new ResponseEntity<>(createUserDTO, HttpStatus.CREATED);
 	}
 
 	// PUT
 	@PutMapping("/{userId}")
 	public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO, @PathVariable Integer userId) {
+		LoggingUtils.logMethodStart();
 		UserDTO updateUser = this.userService.updateUser(userDTO, userId);
+		LoggingUtils.logMethodEnd();
 		return ResponseEntity.ok(updateUser);
 	}
 
@@ -56,7 +67,9 @@ public class UserController {
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<StatusResponse> deleteUser(@PathVariable Integer userId) {
+		LoggingUtils.logMethodStart();
 		this.userService.deleteUser(userId);
+		LoggingUtils.logMethodEnd();
 		return ResponseEntity.ok(new StatusResponse("User Deleted Successfully", true));
 	}
 

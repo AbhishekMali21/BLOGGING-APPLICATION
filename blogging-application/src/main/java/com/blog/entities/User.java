@@ -43,6 +43,8 @@ import lombok.Setter;
 @Setter
 public class User implements UserDetails {
 
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
@@ -57,9 +59,7 @@ public class User implements UserDetails {
 	private List<Post> posts = new ArrayList<>();
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinTable(name = "user_role",
-		joinColumns = @JoinColumn(name = "user", referencedColumnName = "id"),
-		inverseJoinColumns = @JoinColumn(name = "role", referencedColumnName = "id"))
+	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role", referencedColumnName = "id"))
 	private Set<Role> role = new HashSet<>();
 
 	/**
@@ -132,4 +132,11 @@ public class User implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", about=" + about
+				+ ", posts=" + posts + ", role=" + role + "]";
+	}
+
 }

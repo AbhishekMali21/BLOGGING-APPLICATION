@@ -13,7 +13,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.blog.config.AppConstants;
 import com.blog.entities.Role;
 import com.blog.repositories.RoleRepository;
+import com.blog.utils.LoggingUtils;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 @SpringBootApplication
 public class BloggingApplication implements CommandLineRunner {
 
@@ -40,7 +44,8 @@ public class BloggingApplication implements CommandLineRunner {
 	 */
 	@Override
 	public void run(String... args) throws Exception {
-		System.out.println(this.passwordEncoder.encode("root"));
+		LoggingUtils.logMethodStart();
+		log.info(this.passwordEncoder.encode("root"));
 		try {
 			Role role = new Role();
 			role.setId(AppConstants.ROLE_ADMIN_USER);
@@ -53,10 +58,11 @@ public class BloggingApplication implements CommandLineRunner {
 			List<Role> roles = List.of(role, role1);
 			List<Role> allRoles = this.roleRepository.saveAll(roles);
 			allRoles.forEach(r -> {
-				System.out.println(r.getName());
+				log.info(r.getName());
 			});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		LoggingUtils.logMethodEnd();
 	}
 }

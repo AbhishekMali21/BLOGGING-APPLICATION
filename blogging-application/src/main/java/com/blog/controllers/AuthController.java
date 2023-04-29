@@ -19,7 +19,11 @@ import com.blog.payloads.JwtAuthResponse;
 import com.blog.payloads.UserDTO;
 import com.blog.security.JwtTokenHelper;
 import com.blog.services.UserService;
+import com.blog.utils.LoggingUtils;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -39,29 +43,35 @@ public class AuthController {
 	@PostMapping("/login")
 	public ResponseEntity<JwtAuthResponse> createToken(@RequestBody JwtAuthRequest jwtAuthRequest)
 			throws AuthorizationException {
+		LoggingUtils.logMethodStart();
 		this.authenticate(jwtAuthRequest.getUserName(), jwtAuthRequest.getPassword());
 		UserDetails userDetails = this.userDetailsService.loadUserByUsername(jwtAuthRequest.getUserName());
 		String generateToken = this.jwtTokenHelper.generateToken(userDetails);
 		JwtAuthResponse response = new JwtAuthResponse();
 		response.setToken(generateToken);
-		return new ResponseEntity<>(response, HttpStatus.OK);
+		LoggingUtils.logMethodEnd();
+		return ResponseEntity.ok(response);
 	}
 
 	private void authenticate(String userName, String password) throws AuthorizationException {
+		LoggingUtils.logMethodStart();
 		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
 				userName, password);
 		try {
 			this.authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 		} catch (BadCredentialsException e) {
-			System.out.println("Invalid Details");
+			log.info("Invalid username or password !!");
 			throw new AuthorizationException("Invalid username or password !!");
 		}
+		LoggingUtils.logMethodEnd();
 	}
 
 	// register new user via api
 	@PostMapping("/register")
 	public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO userDTO) {
+		LoggingUtils.logMethodStart();
 		UserDTO registeredUser = this.userService.registerNewUser(userDTO);
-		return new ResponseEntity<UserDTO>(registeredUser, HttpStatus.CREATED);
+		LoggingUtils.logMethodEnd();
+		return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
 	}
 }

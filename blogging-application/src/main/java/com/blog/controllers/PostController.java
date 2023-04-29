@@ -1,7 +1,11 @@
 package com.blog.controllers;
 
-import com.blog.config.AppConstants;
-import com.blog.services.FileService;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -17,17 +21,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.blog.config.AppConstants;
 import com.blog.payloads.PostDTO;
 import com.blog.payloads.PostResponse;
 import com.blog.payloads.StatusResponse;
+import com.blog.services.FileService;
 import com.blog.services.PostService;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
+import com.blog.utils.LoggingUtils;
 
 @RestController
 @RequestMapping("/api")
@@ -45,29 +47,38 @@ public class PostController {
 	@PostMapping("/user/{userId}/category/{categoryId}/posts")
 	public ResponseEntity<PostDTO> createPost(@RequestBody PostDTO postDTO, @PathVariable Integer userId,
 			@PathVariable Integer categoryId) {
+		LoggingUtils.logMethodStart();
 		PostDTO post = this.postService.createPost(postDTO, userId, categoryId);
-		return new ResponseEntity<PostDTO>(post, HttpStatus.CREATED);
+		LoggingUtils.logMethodEnd();
+		return new ResponseEntity<>(post, HttpStatus.CREATED);
 	}
 
 	@GetMapping("/category/{categoryId}/posts")
 	public ResponseEntity<PostResponse> getPostsByCategory(@PathVariable Integer categoryId,
 			@RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
 			@RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize) {
+		LoggingUtils.logMethodStart();
 		PostResponse postsByCategory = this.postService.getPostsByCategory(categoryId, pageNumber, pageSize);
-		return new ResponseEntity<PostResponse>(postsByCategory, HttpStatus.OK);
+		LoggingUtils.logMethodEnd();
+		return ResponseEntity.ok(postsByCategory);
 	}
 
 	@GetMapping("/user/{userId}/posts")
 	public ResponseEntity<PostResponse> getPostsByUser(@PathVariable Integer userId,
 			@RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
 			@RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize) {
+		LoggingUtils.logMethodStart();
 		PostResponse postsByUser = this.postService.getPostsByUser(userId, pageNumber, pageSize);
-		return new ResponseEntity<PostResponse>(postsByUser, HttpStatus.OK);
+		LoggingUtils.logMethodEnd();
+		return ResponseEntity.ok(postsByUser);
 	}
 
 	@GetMapping("/posts/{postId}")
 	public ResponseEntity<PostDTO> getPostById(@PathVariable Integer postId) {
-		return ResponseEntity.ok(this.postService.getPostById(postId));
+		LoggingUtils.logMethodStart();
+		PostDTO post = this.postService.getPostById(postId);
+		LoggingUtils.logMethodEnd();
+		return ResponseEntity.ok(post);
 	}
 
 	@GetMapping("/posts")
@@ -76,48 +87,66 @@ public class PostController {
 			@RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
 			@RequestParam(value = "sortBy", defaultValue = AppConstants.POST_ID, required = false) String sortBy,
 			@RequestParam(value = "sortOrder", defaultValue = AppConstants.SORT_ASC, required = false) String sortOrder) {
-		return ResponseEntity.ok(this.postService.getAllPosts(pageNumber, pageSize, sortBy, sortOrder));
+		LoggingUtils.logMethodStart();
+		PostResponse allPosts = this.postService.getAllPosts(pageNumber, pageSize, sortBy, sortOrder);
+		LoggingUtils.logMethodEnd();
+		return ResponseEntity.ok(allPosts);
 	}
 
 	@DeleteMapping("/posts/{postId}")
 	public StatusResponse deletePost(@PathVariable Integer postId) {
+		LoggingUtils.logMethodStart();
 		this.postService.deletePost(postId);
+		LoggingUtils.logMethodEnd();
 		return new StatusResponse("Post is successfully Deleted", true);
 	}
 
 	@PutMapping("/posts/{postId}")
 	public ResponseEntity<PostDTO> updatePost(@RequestBody PostDTO postDTO, @PathVariable Integer postId) {
+		LoggingUtils.logMethodStart();
 		PostDTO updatePost = this.postService.updatePost(postDTO, postId);
-		return new ResponseEntity<PostDTO>(updatePost, HttpStatus.OK);
+		LoggingUtils.logMethodEnd();
+		return ResponseEntity.ok(updatePost);
 	}
 
 	@GetMapping("/posts/search")
-	public ResponseEntity<List<PostDTO>> searchPostByTitle(@RequestParam(value = "titleQ", required = true) String titleQ){
+	public ResponseEntity<List<PostDTO>> searchPostByTitle(
+			@RequestParam(value = "titleQ", required = true) String titleQ) {
+		LoggingUtils.logMethodStart();
 		List<PostDTO> postDTOs = this.postService.searchPosts(titleQ);
-		return new ResponseEntity<List<PostDTO>>(postDTOs, HttpStatus.OK);
+		LoggingUtils.logMethodEnd();
+		return ResponseEntity.ok(postDTOs);
 	}
 
 	@GetMapping("/posts/searchContent/{contentText}")
-	public ResponseEntity<List<PostDTO>> searchPostByContent(@PathVariable String contentText){
+	public ResponseEntity<List<PostDTO>> searchPostByContent(@PathVariable String contentText) {
+		LoggingUtils.logMethodStart();
 		List<PostDTO> postDTOs = this.postService.searchPostsContentText(contentText);
-		return new ResponseEntity<List<PostDTO>>(postDTOs, HttpStatus.OK);
+		LoggingUtils.logMethodEnd();
+		return ResponseEntity.ok(postDTOs);
 	}
 
 	// post image upload api
 	@PostMapping("/posts/image/upload/{postId}")
-	public ResponseEntity<PostDTO> uploadPostImage(@RequestParam("image") MultipartFile image, @PathVariable Integer postId) throws IOException {
+	public ResponseEntity<PostDTO> uploadPostImage(@RequestParam("image") MultipartFile image,
+			@PathVariable Integer postId) throws IOException {
+		LoggingUtils.logMethodStart();
 		String fileName = this.fileService.uploadImage(path, image);
 		PostDTO postDTO = this.postService.getPostById(postId);
 		postDTO.setImageName(fileName);
 		PostDTO updatePost = this.postService.updatePost(postDTO, postId);
-		return new ResponseEntity<>(updatePost, HttpStatus.OK);
+		LoggingUtils.logMethodEnd();
+		return ResponseEntity.ok(updatePost);
 	}
 
 	// method to serve image files
 	@GetMapping(value = "/posts/image/{imageName}", produces = MediaType.IMAGE_JPEG_VALUE)
-	public void downloadImage(@PathVariable("imageName") String imageName, HttpServletResponse response) throws IOException {
+	public void downloadImage(@PathVariable("imageName") String imageName, HttpServletResponse response)
+			throws IOException {
+		LoggingUtils.logMethodStart();
 		InputStream resource = this.fileService.getResource(path, imageName);
 		response.setContentType(MediaType.IMAGE_JPEG_VALUE);
 		StreamUtils.copy(resource, response.getOutputStream());
+		LoggingUtils.logMethodEnd();
 	}
 }

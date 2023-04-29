@@ -22,4 +22,10 @@ public class Comment {
 	@ManyToOne
 	private Post post;
 	// private User user;
+
+	@Override
+	public String toString() {
+		return "Comment [id=" + id + ", content=" + content + ", post=" + post + "]";
+	}
+
 }
