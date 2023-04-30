@@ -1,1 +1,3 @@
 /.metadata/
+blogging-application/logs/*
+.idea/*
