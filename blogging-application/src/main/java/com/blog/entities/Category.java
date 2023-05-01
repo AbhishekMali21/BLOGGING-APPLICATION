@@ -39,7 +39,7 @@ public class Category {
 	@Override
 	public String toString() {
 		return "Category [categoryId=" + categoryId + ", categoryTitle=" + categoryTitle + ", categoryDesc="
-				+ categoryDesc + ", posts=" + posts + "]";
+				+ categoryDesc + "]";
 	}
 
 }

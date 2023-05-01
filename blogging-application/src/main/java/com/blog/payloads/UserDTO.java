@@ -46,4 +46,11 @@ public class UserDTO {
 	}
 
 	private Set<RoleDTO> role = new HashSet<>();
+
+	@Override
+	public String toString() {
+		return "UserDTO [id=" + id + ", name=" + name + ", email=" + email + ", about=" + about + ", role=" + role
+				+ "]";
+	}
+
 }

@@ -49,8 +49,7 @@ public class Post {
 	@Override
 	public String toString() {
 		return "Post [postId=" + postId + ", title=" + title + ", content=" + content + ", imageName=" + imageName
-				+ ", addedDate=" + addedDate + ", category=" + category + ", user=" + user + ", comments=" + comments
-				+ "]";
+				+ ", addedDate=" + addedDate + "]";
 	}
 
 }
