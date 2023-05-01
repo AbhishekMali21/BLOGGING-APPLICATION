@@ -30,7 +30,7 @@ jobs:
         cache: maven
 
     - name: Step 3 - Have the GitHub actions build Maven project
-      run: mvn -B package --file pom.xml
+      run: mvn -B package --file blogging-application/pom.xml
 
     - name: Step 4 - List the current Directory
       run: ls -a
