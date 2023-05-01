@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -127,8 +128,8 @@ public class PostController {
 	}
 
 	// post image upload api
-	@PostMapping("/image/upload/{postId}")
-	public ResponseEntity<PostDTO> uploadPostImage(@RequestParam("image") MultipartFile image,
+	@PostMapping(value = "/image/upload/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<PostDTO> uploadPostImage(@RequestPart(value = "image") MultipartFile image,
 			@PathVariable Integer postId) throws IOException {
 		LoggingUtils.logMethodStart();
 		String fileName = this.fileService.uploadImage(path, image);
