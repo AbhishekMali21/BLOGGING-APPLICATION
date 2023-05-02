@@ -18,10 +18,15 @@
 		<java.version>11</java.version>
 	</properties>
 	<dependencies>
+		<!-- It includes the spring-data-jpa and hibernate-core dependencies. -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+		<!-- It includes the spring-web, spring-webmvc, and jackson-databind dependencies. -->
+		<!-- jackson-databind is a Java library used to convert Java objects into 
+			JSON (JavaScript Object Notation) format and vice versa. It provides a simple 
+			way to serialize Java objects to JSON and deserialize JSON back to Java objects. -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -32,15 +37,19 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<!-- It includes the spring-security-core, spring-security-config, and 
+			spring-security-web dependencies. -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+		<!-- It includes the hibernate-validator and validation-api dependencies. -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter -->
+		<!-- It includes the springfox-swagger2 and springfox-swagger-ui dependencies. -->
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-boot-starter</artifactId>
@@ -51,6 +60,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-log4j2</artifactId>
 		</dependency>
+		<!-- automatic restarts and live reload. -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -63,6 +73,8 @@
 			<scope>runtime</scope>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
+		<!-- This is a JSON Web Token (JWT) library for Java that provides support 
+			for creating and parsing JWTs. -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
@@ -84,6 +96,8 @@
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-xml</artifactId>
 		</dependency>
+		<!-- It includes the spring-boot-test, spring-boot-test-autoconfigure, 
+			junit-jupiter, and mockito-core dependencies. -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
