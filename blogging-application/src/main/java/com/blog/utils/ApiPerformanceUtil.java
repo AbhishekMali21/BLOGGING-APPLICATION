@@ -4,6 +4,11 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class ApiPerformanceUtil {
+
+	private ApiPerformanceUtil() {
+
+	}
+
 	public static void measure(Runnable runnable, String apiName) {
 		long startTime = System.currentTimeMillis();
 		try {

@@ -57,9 +57,7 @@ public class BloggingApplication implements CommandLineRunner {
 
 			List<Role> roles = List.of(role, role1);
 			List<Role> allRoles = this.roleRepository.saveAll(roles);
-			allRoles.forEach(r -> {
-				log.info(r.getName());
-			});
+			allRoles.forEach(r -> log.info(r.getName()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

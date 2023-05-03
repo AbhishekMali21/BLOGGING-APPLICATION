@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
 	public List<UserDTO> getAllUsers() {
 		LoggingUtils.logMethodStart();
 		List<User> users = this.userRepository.findAll();
-		List<UserDTO> userDTOs = users.stream().map(user -> this.userToDTO(user)).collect(Collectors.toList());
+		List<UserDTO> userDTOs = users.stream().map(this::userToDTO).collect(Collectors.toList());
 		log.info(userDTOs);
 		LoggingUtils.logMethodEnd();
 		return userDTOs;

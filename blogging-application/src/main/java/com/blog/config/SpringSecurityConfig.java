@@ -27,7 +27,7 @@ import com.blog.security.JwtAuthenticationFilter;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SpringSecurityConfig{
 	
-	public static final String[] PUBLIC_URLS = {
+	protected static final String[] PUBLIC_URLS = {
 			"/api/auth/**",
 			"/v3/api-docs",
 			"/v2/api-docs",

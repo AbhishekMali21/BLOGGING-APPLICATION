@@ -1,5 +1,7 @@
 package com.blog.entities;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,7 +16,10 @@ import lombok.Setter;
 @Table(name = "comments")
 @Getter
 @Setter
-public class Comment {
+public class Comment implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;

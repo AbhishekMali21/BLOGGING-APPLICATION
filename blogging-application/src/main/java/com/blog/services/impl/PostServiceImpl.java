@@ -126,7 +126,7 @@ public class PostServiceImpl implements PostService {
 		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 		Page<Post> pagePosts = this.postRepository.findAll(pageable);
 		List<Post> allPosts = pagePosts.getContent();
-		List<PostDTO> postDTOS = allPosts.stream().map((post) -> this.modelMapper.map(post, PostDTO.class))
+		List<PostDTO> postDTOS = allPosts.stream().map(post -> this.modelMapper.map(post, PostDTO.class))
 				.collect(Collectors.toList());
 		PostResponse postResponse = paginationInfo(pagePosts, postDTOS);
 		log.info(postResponse);
@@ -165,7 +165,7 @@ public class PostServiceImpl implements PostService {
 		Pageable pageable = PageRequest.of(pageNumber, pageSize);
 		Page<Post> posts = this.postRepository.findByCategory(category, pageable);
 		List<Post> allPosts = posts.getContent();
-		List<PostDTO> postDTOS = allPosts.stream().map((post) -> this.modelMapper.map(post, PostDTO.class))
+		List<PostDTO> postDTOS = allPosts.stream().map(post -> this.modelMapper.map(post, PostDTO.class))
 				.collect(Collectors.toList());
 		PostResponse postResponse = paginationInfo(posts, postDTOS);
 		log.info(postResponse);
@@ -185,7 +185,7 @@ public class PostServiceImpl implements PostService {
 		Pageable pageable = PageRequest.of(pageNumber, pageSize);
 		Page<Post> posts = this.postRepository.findByUser(user, pageable);
 		List<Post> allPosts = posts.getContent();
-		List<PostDTO> postDTOS = allPosts.stream().map((post) -> this.modelMapper.map(post, PostDTO.class))
+		List<PostDTO> postDTOS = allPosts.stream().map(post -> this.modelMapper.map(post, PostDTO.class))
 				.collect(Collectors.toList());
 		PostResponse postResponse = paginationInfo(posts, postDTOS);
 		log.info(postResponse);

@@ -3,6 +3,7 @@
  */
 package com.blog.entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -41,7 +42,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class User implements UserDetails {
+public class User implements UserDetails, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -70,7 +71,7 @@ public class User implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		List<SimpleGrantedAuthority> authorities = this.role.stream()
-				.map((role1) -> new SimpleGrantedAuthority(role1.getName())).collect(Collectors.toList());
+				.map(role1 -> new SimpleGrantedAuthority(role1.getName())).collect(Collectors.toList());
 		return authorities;
 	}
 
