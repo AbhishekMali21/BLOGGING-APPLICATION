@@ -51,21 +51,23 @@ public class AuthController {
 			UserDetails userDetails = this.userDetailsService.loadUserByUsername(jwtAuthRequest.getUserName());
 			String generateToken = this.jwtTokenHelper.generateToken(userDetails);
 			response.setToken(generateToken);
-		}, "createToken API");
+		}, "createToken() API");
 		LoggingUtils.logMethodEnd();
 		return ResponseEntity.ok(response);
 	}
 
 	private void authenticate(String userName, String password) throws AuthorizationException {
 		LoggingUtils.logMethodStart();
-		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-				userName, password);
-		try {
-			this.authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-		} catch (BadCredentialsException e) {
-			log.info("Invalid username or password !!");
-			throw new AuthorizationException("Invalid username or password !!");
-		}
+		ApiPerformanceUtil.measure(() -> {
+			UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+					userName, password);
+			try {
+				this.authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+			} catch (BadCredentialsException e) {
+				log.info("Invalid username or password !!");
+				throw new AuthorizationException("Invalid username or password !!");
+			}
+		}, "authenticate() API");
 		LoggingUtils.logMethodEnd();
 	}
 
@@ -73,7 +75,15 @@ public class AuthController {
 	@PostMapping("/register")
 	public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO userDTO) {
 		LoggingUtils.logMethodStart();
-		UserDTO registeredUser = this.userService.registerNewUser(userDTO);
+		UserDTO registeredUser = null;
+		try {
+			registeredUser = ApiPerformanceUtil.measureUsingCallable(() -> {
+				return this.userService.registerNewUser(userDTO);
+			}, "registerUser() API");
+		} catch (Exception e) {
+			log.error("Error registering user: " + e.getMessage(), e);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		LoggingUtils.logMethodEnd();
 		return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
 	}
